@@ -1,83 +1,21 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Blazor</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
+﻿@inject NavigationManager  _NavigationManager
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
-</div>
+<SfAppBar ColorMode="AppBarColor.Primary">
+	<SfButton CssClass="e-inherit" IconCss="e-icons e-home" Content="Home" OnClick="@(() => NavigationPage("/"))"></SfButton>
+	<SfButton CssClass="e-inherit" IconCss="e-icons e-user" Content="Employy" OnClick="@(() => NavigationPage("/Employy"))"></SfButton>
+	<SfButton CssClass="e-inherit" IconCss="e-icons e-location" Content="Map" OnClick="@(() => NavigationPage("/"))"></SfButton>
+	<SfButton CssClass="e-inherit" IconCss="e-icons e-notes" Content="Notes" OnClick="@(() => NavigationPage("/"))"></SfButton>
+	<SfButton CssClass="e-inherit" IconCss="e-icons e-print-layout" Content="print-layout" OnClick="@(() => NavigationPage("/"))"></SfButton>
+	<SfButton CssClass="e-inherit" IconCss="e-icons e-tint" Content="temperature" OnClick="@(() => NavigationPage("/"))"></SfButton>
+	<SfButton CssClass="e-inherit" IconCss="e-icons e-filter-active" Content="filter" OnClick="@(() => NavigationPage("/"))"></SfButton>
+	<SfButton CssClass="e-inherit" IconCss="e-icons e-settings" Content="settings" OnClick="@(() => NavigationPage("/"))"></SfButton>
+	<AppBarSpacer></AppBarSpacer>@*  dãn distance *@
+	<SfButton CssClass="e-inherit" IconCss="e-icons e-circle-add" Content="Add" OnClick="@(() => NavigationPage("/"))"></SfButton>
+</SfAppBar>
 
-@code {
-    private bool collapseNavMenu = true;
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : "slide-in";
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
+@code{
+	void NavigationPage(string page){
+		_NavigationManager.NavigateTo(page);
+	}
 }
-<style>
-    /* Basic styling for the sidebar */
-    .nav-scrollable {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 250px;
-        height: 100%;
-        background-color: #343a40;
-        color: white;
-        transition: transform 0.3s ease-in-out; /* Add transition for smooth sliding */
-        transform: translateX(-100%); /* Initially off-screen */
-    }
-
-        .nav-scrollable.slide-in {
-            transform: translateX(0); /* Move into view when active */
-        }
-
-    /* For the nav menu items */
-    .nav-item {
-        padding: 15px;
-    }
-
-    .nav-link {
-        color: white;
-        text-decoration: none;
-    }
-
-    /* Optional: Adjust the body content when the sidebar is open */
-    body.nav-menu-open {
-        margin-left: 250px; /* Push content when sidebar is open */
-        transition: margin-left 0.3s ease-in-out;
-    }
-
-    /* Make the top row content transition when sidebar is toggled */
-    .top-row {
-        transition: margin-left 0.3s ease-in-out;
-    }
-
-        .top-row.ps-3 {
-            margin-left: 0; /* Set default left margin */
-        }
-
-</style>

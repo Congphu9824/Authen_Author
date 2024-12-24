@@ -101,3 +101,22 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+
+/* Css Employy*/
+.e-activecolor {
+    color: green;
+}
+
+.e-inactivecolor {
+    color: red;
+}
+
+.statustemp {
+    font-weight: bold;
+}
+
+.statustxt {
+    font-size: 14px;
+}
+

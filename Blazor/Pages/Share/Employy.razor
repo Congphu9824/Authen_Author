@@ -1,0 +1,93 @@
+﻿@page "/Employy"
+@using Data
+@inject Microsoft.AspNetCore.Components.NavigationManager UriHelper
+
+
+<h3 class="text-center text-primary">List Employy</h3>
+
+<SfGrid DataSource="GridData" AllowFiltering="true" AllowSorting="true" Toolbar="@(new List<string>() {"Add", "Edit", "Delete", "Update", "Cancel", "Print", "PdfExport", "Search"})" Height="350px;"
+@ref="Grid" AllowPaging="true" SelectionSettings="new GridSelectionSettings{Type =  Syncfusion.Blazor.Grids.SelectionType.Single}">
+	<GridFilterSettings Type="FilterType.Excel"></GridFilterSettings> @* Filter *@
+	<GridPageSettings PageSize="5" />@* PageSizes="true" *@
+	<GridEditSettings AllowEditing="true" AllowAdding="true" AllowDeleting="true" Mode="EditMode.Normal"></GridEditSettings> @* edit Mode="EditMode.Normal" *@
+	<GridColumns>
+		<GridColumn Field="Name" HeaderText="Name" IsPrimaryKey="false" EditType="EditType.DefaultEdit"></GridColumn>
+		<GridColumn Field=@nameof(_employee.Email) HeaderText="Email" MinWidth="8" Width="200"></GridColumn>
+		<GridColumn Field="Location" HeaderText="Location" EditType="EditType.DefaultEdit"></GridColumn>
+		<GridColumn Field=@nameof(_employee.Salary) HeaderText="Salary" Format="C2" TextAlign="TextAlign.Right" MinWidth="8" Width="150"></GridColumn>
+		<GridColumn Field="Address" HeaderText="Address" EditType="EditType.DefaultEdit"></GridColumn>
+		<GridColumn Field="Gender" HeaderText="Gender" EditType="EditType.DefaultEdit"></GridColumn>
+		<GridColumn Field="Class" HeaderText="Class" EditType="EditType.DefaultEdit"></GridColumn>
+		<GridColumn Field="Designation" HeaderText="Designation" EditType="EditType.DefaultEdit"></GridColumn>
+		<GridColumn Field="Status" HeaderText="Status" EditType="EditType.DefaultEdit">
+			<Template>
+				@{
+					var employee = (context as Employee);
+					if (employee.Status == "Active")
+					{
+						<div class="statustemp e-activecolor">
+							<span class="statustxt e-activecolor">@employee.Status</span>
+						</div>
+					}
+					else
+					{
+						<div class="statustemp e-inactivecolor">
+							<span class="statustxt e-inactivecolor">@employee.Status</span>
+						</div>
+					}
+				}
+			</Template>
+		</GridColumn>
+		<GridColumn Field=@nameof(_employee.DateOfBirth) HeaderText="Date Of Birth" Format="d" Type="ColumnType.DateOnly" TextAlign="TextAlign.Right" Width="140"></GridColumn>
+		<GridColumn Field="Image" HeaderText="Image" EditType="EditType.DefaultEdit">
+			<Template>
+				@{
+					var employee = context as Employee;
+					if (!string.IsNullOrEmpty(employee.Image))
+					{
+						<img src="@employee.Image" alt="Employee Image" style="width:50px; height:50px; border-radius:50%;" />
+					}
+					else
+					{
+						<span>No Image</span>
+					}
+				}
+			</Template>
+		</GridColumn>
+
+		<GridColumn Width="60">
+			<Template>
+				@{
+					var Employ = context as Employee;
+					<SfButton CssClass="e-inherit" IconCss="e-icons e-edit" OnClick="@(()=> EditEmploy(Employ!.Id))"></SfButton>
+				}
+			</Template>
+		</GridColumn>
+		<GridColumn Width="60">
+			<Template>
+				@{
+					var Employ = context as Employee;
+					<SfButton CssClass="e-inherit" IconCss="e-icons e-delete" OnClick="@(() => DeleteEmploy(Employ!))"></SfButton>
+				}
+			</Template>
+		</GridColumn>
+	</GridColumns>
+</SfGrid>
+<!-- Dialog xác nhận xóa -->
+<SfDialog Width="335px" IsModal="true" @bind-Visible="ShowDeleteDialog">
+	<DialogTemplates>
+		<Header>Are you sure?</Header>
+		<Content>
+			<p>Do you really want to delete @EmployTodelete.Name</p>
+		</Content>
+	</DialogTemplates>
+	<DialogButtons>
+		<DialogButton Content="Yep." IsPrimary="false" OnClick="ConfirmDeleteContact"></DialogButton>
+		<DialogButton Content="Nope." IsPrimary="true" OnClick="CancelDeleteEmploy"></DialogButton>
+	</DialogButtons>
+	<DialogAnimationSettings Effect="@DialogEffect.Zoom"></DialogAnimationSettings>
+</SfDialog>
+
+@code {
+
+}

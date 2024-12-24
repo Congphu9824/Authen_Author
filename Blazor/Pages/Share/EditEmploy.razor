@@ -1,0 +1,70 @@
+﻿@page "/Employy/edit/{id:int?}"
+@page "/Employy/new"
+
+@using Data
+@inject HttpClient http
+@inject NavigationManager _NavigationManager
+
+<h3>@(id != null ? $"Edit: {employee.Name}" : "Create a new Employee")</h3>
+
+<div class="form-container" style="width: 50%; margin: auto;">
+	<EditForm Model="employee">
+		<DataAnnotationsValidator />
+		<SfTextBox CssClass="e-outline" Placeholder="Name" FloatLabelType="@FloatLabelType.Auto" @bind-Value="employee.Name"></SfTextBox>
+		<SfTextBox CssClass="e-outline" Placeholder="Email" FloatLabelType="@FloatLabelType.Auto" @bind-Value="employee.Email"></SfTextBox>
+		<SfTextBox CssClass="e-outline" Placeholder="Location" FloatLabelType="@FloatLabelType.Auto" @bind-Value="employee.Location"></SfTextBox>
+		<SfNumericTextBox CssClass="e-outline" Placeholder="Salary" FloatLabelType="@FloatLabelType.Auto" @bind-Value="employee.Salary"></SfNumericTextBox>
+		<SfTextBox CssClass="e-outline" Placeholder="Address" FloatLabelType="@FloatLabelType.Auto" @bind-Value="employee.Address"></SfTextBox>
+		<SfTextBox CssClass="e-outline" Placeholder="Gender" FloatLabelType="@FloatLabelType.Auto" @bind-Value="employee.Gender"></SfTextBox>
+		<SfTextBox CssClass="e-outline" Placeholder="Class" FloatLabelType="@FloatLabelType.Auto" @bind-Value="employee.Class"></SfTextBox>
+		<SfTextBox CssClass="e-outline" Placeholder="Designation" FloatLabelType="@FloatLabelType.Auto" @bind-Value="employee.Designation"></SfTextBox>
+		<SfTextBox CssClass="e-outline" Placeholder="Status" FloatLabelType="@FloatLabelType.Auto" @bind-Value="employee.Status"></SfTextBox>
+		<SfDateTimePicker CssClass="e-outline" Placeholder="Date of Birth" FloatLabelType="@FloatLabelType.Auto" @bind-Value="employee.DateOfBirth"></SfDateTimePicker>
+		<SfTextBox CssClass="e-outline" Placeholder="Image URL" FloatLabelType="@FloatLabelType.Auto" @bind-Value="employee.Image"></SfTextBox>
+	</EditForm>
+</div>
+
+@code {
+	[Parameter] 
+	public int? id { get; set; }
+
+	private Employee employee = new Employee();
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		var response = await http.GetAsync($"api/Employ/{id}");
+		if (response.IsSuccessStatusCode)
+		{
+			var jsonresult = await response.Content.ReadFromJsonAsync<Employee>();
+			if (jsonresult is not null)
+			{
+				employee = jsonresult;
+			}
+			else
+			{
+				_NavigationManager.NavigateTo("/Employy/new");
+			}
+		}
+	}
+
+	private async Task HandleSubmit()
+	{
+		if (id.HasValue)
+		{
+			var response = await http.PutAsJsonAsync($"api/Employ/{id.Value}", employee);
+			if (response.IsSuccessStatusCode)
+			{
+				_NavigationManager.NavigateTo("/Employy");
+			}
+		}
+		else
+		{
+			var response = await http.PostAsJsonAsync("api/employy", employee);
+			if (response.IsSuccessStatusCode)
+			{
+				_NavigationManager.NavigateTo("/Employy");
+			}
+		}
+	}
+}
